@@ -38,10 +38,9 @@ def create_new_assets(schemas, old_catalog_name:str, new_catalog_name: str, mana
                     )
 
                 if table.type == "EXTERNAL" and external:
-                    print(table)
                     # Get DDL
                     ddl = spark.sql(
-                        f"SHOW CREATE TABLE {catalog.name}.{schema.name}.{table.name}"
+                        f"SHOW CREATE TABLE {old_catalog_name}.{schema.name}.{table.name}"
                     ).collect()[0]["createtab_stmt"]
 
                     # Drop Existing External Table as UC does not support 1:M mapping for External Locations/Tables
@@ -110,5 +109,5 @@ copy_catalog(
     old_catalog_name="gshen_catalog",
     new_catalog_name="gshen_catalog_clone",
     managed=True,
-    external=True,
+    external=False,
 )
